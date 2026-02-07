@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>System Stability Report</title>
+<style>
+  body {
+    font-family: "Courier New", Courier, monospace;
+    background: #f8f8f2;
+    color: #222;
+    padding: 30px;
+    line-height: 1.4;
+  }
+
+  .report {
+    width: 600px;
+    margin: auto;
+    background: #fff;
+    border: 2px solid #333;
+    padding: 20px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+    position: relative;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-decoration: underline;
+  }
+
+  .section {
+    margin-bottom: 15px;
+  }
+
+  .highlight {
+    background-color: yellow;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .hidden {
+    display: none;
+    margin-top: 5px;
+    padding: 5px;
+    background: #eee;
+    border-left: 4px solid #222;
+  }
+
+  .footer {
+    text-align: right;
+    font-size: 12px;
+    margin-top: 20px;
+    color: #555;
+  }
+
+  .clickable:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<div class="report">
+  <h1>SYSTEM STABILITY REPORT</h1>
+
+  <div class="section">
+    SUBJECT: <span class="highlight clickable" onclick="toggle('subject1')">Subject B</span>
+    <div id="subject1" class="hidden">
+      <p>Extended anomalies detected. Subject operated outside expected probability bounds.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    OBSERVATION: <span class="highlight clickable" onclick="toggle('obs1')">Pattern deviation logged</span>
+    <div id="obs1" class="hidden">
+      <ul>
+        <li>Audience belief reinforces anomaly</li>
+        <li>Correction event scheduled</li>
+        <li>Visibility increases scrutiny</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    NOTES: <span class="highlight clickable" onclick="toggle('notes1')">System feedback</span>
+    <div id="notes1" class="hidden">
+      <p>Subjects operating under illusion of agency are tracked and logged. Outlier persistence exceeds expected duration.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    INTERNAL USE ONLY — DO NOT DISTRIBUTE
+  </div>
+</div>
+
+<script>
+function toggle(id) {
+  var el = document.getElementById(id);
+  if (el.style.display === "none" || el.style.display === "") {
+    el.style.display = "block";
+  } else {
+    el.style.display = "none";
+  }
+}
+</script>
+</body>
+</html>
