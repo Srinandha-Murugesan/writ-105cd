@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Recipe Notebook</title>
+<style>
+  body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: #fff8f0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  .notebook {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: linear-gradient(145deg, #fffbf0, #fff1d6);
+    border: 4px double #c57f2f;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+  .title {
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #b85c1a;
+    margin-bottom: 20px;
+  }
+  .tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+  }
+  .tab {
+    background: #ffd97d;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+    color: #5a2e00;
+  }
+  .tab:hover {
+    background: #ffc84d;
+    color: #3d1c00;
+  }
+  .content {
+    padding: 15px;
+    background: #fff3d1;
+    border-radius: 8px;
+    border: 2px dashed #e0b07b;
+    min-height: 200px;
+  }
+  .recipe {
+    display: none;
+  }
+  .active {
+    display: block;
+  }
+  ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  li {
+    margin: 8px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="notebook">
+  <div class="title">Secret Recipe Notebook</div>
+  <div class="tabs">
+    <div class="tab" onclick="showTab('ingredients')">Ingredients</div>
+    <div class="tab" onclick="showTab('instructions')">Instructions</div>
+    <div class="tab" onclick="showTab('tips')">Tips & Secrets</div>
+  </div>
+  <div class="content">
+    <div id="ingredients" class="recipe active">
+      <ul>
+        <li>2 cups golden sugar crystals</li>
+        <li>1 tbsp rainbow sprinkles</li>
+        <li>½ cup rich cocoa chunks</li>
+        <li>3 drops of essence of laughter</li>
+        <li>Secret pinch of unicorn salt (shhh!)</li>
+      </ul>
+    </div>
+    <div id="instructions" class="recipe">
+      <ol>
+        <li>Preheat the magical stove to 350°F.</li>
+        <li>Mix sugar crystals and cocoa in a sparkling bowl.</li>
+        <li>Fold in essence of laughter carefully.</li>
+        <li>Add sprinkles while humming your favorite tune.</li>
+        <li>Bake until golden brown and glowing.</li>
+      </ol>
+    </div>
+    <div id="tips" class="recipe">
+      <ul>
+        <li>Work quickly—speed improves flavor!</li>
+        <li>Share a smile with a friend for extra magical effect.</li>
+        <li>Never stir backwards, it creates a bitter taste.</li>
+        <li>Golden candy glows brighter if baked with care.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  const tabs = document.querySelectorAll('.recipe');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+}
+</script>
+
+</body>
+</html>
