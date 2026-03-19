@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Town Fair Stall</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", sans-serif;
+      background: linear-gradient(to bottom, #f8c27a 0%, #ffdca8 35%, #ffeccc 100%);
+      color: #4a2a12;
+    }
+
+    .scene-wrapper {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #9c4f12;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6b3a17;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .fair-scene {
+      position: relative;
+      height: 700px;
+      border-radius: 20px;
+      overflow: hidden;
+      background:
+        linear-gradient(to bottom, rgba(255,244,214,0.7), rgba(255,228,181,0.9)),
+        linear-gradient(to top, #d79b57 0 22%, transparent 22% 100%);
+      border: 5px solid #8b4513;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    }
+
+    /* sky decor */
+    .light-string {
+      position: absolute;
+      width: 100%;
+      height: 100px;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .bulb {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #ffd966;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 217, 102, 0.85);
+    }
+
+    .wire {
+      position: absolute;
+      top: 25px;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      border-top: 3px solid #7a4b22;
+      border-radius: 0 0 50% 50%;
+      opacity: 0.7;
+    }
+
+    /* background attractions */
+    .carousel {
+      position: absolute;
+      left: 70px;
+      top: 130px;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff1b8 0%, #ffd166 55%, #e09f3e 100%);
+      border: 5px solid #a65c1b;
+      opacity: 0.85;
+    }
+
+    .carousel::before,
+    .carousel::after {
+      content: "";
+      position: absolute;
+      background: #8b4513;
+    }
+
+    .carousel::before {
+      width: 8px;
+      height: 170px;
+      left: 81px;
+      top: 0;
+    }
+
+    .carousel::after {
+      height: 8px;
+      width: 170px;
+      left: 0;
+      top: 81px;
+    }
+
+    .game-booth {
+      position: absolute;
+      right: 65px;
+      top: 145px;
+      width: 170px;
+      height: 120px;
+      background: #c96f2d;
+      border: 5px solid #7a3d12;
+      border-bottom-width: 8px;
+      border-radius: 10px 10px 0 0;
+      opacity: 0.9;
+    }
+
+    .game-booth::before {
+      content: "RING TOSS";
+      position: absolute;
+      top: 12px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-weight: bold;
+      color: #fff7e6;
+      letter-spacing: 1px;
+    }
+
+    /* main stall */
+    .stall {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 110px;
+      width: 720px;
+      height: 420px;
+    }
+
+    .awning {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: repeating-linear-gradient(
+        90deg,
+        #ff8fab 0 60px,
+        #fff1f4 60px 120px
+      );
+      border: 6px solid #8b4513;
+      border-bottom: none;
+      border-radius: 18px 18px 0 0;
+    }
+
+    .awning-sign {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff4d6;
+      border: 3px dashed #d48806;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #9c4f12;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .back-wall {
+      position: absolute;
+      top: 100px;
+      left: 20px;
+      width: 680px;
+      height: 160px;
+      background: linear-gradient(to bottom, #ffd699, #f5b971);
+      border: 6px solid #8b4513;
+      border-bottom: none;
+    }
+
+    .counter {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 170px;
+      background: linear-gradient(to bottom, #8b5a2b, #6b3e1d);
+      border: 6px solid #5b3316;
+      border-radius: 0 0 16px 16px;
+    }
+
+    .counter-top {
+      position: absolute;
+      bottom: 160px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: #5e3418;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .object {
+      position: absolute;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      user-select: none;
+    }
+
+    .object:hover {
+      transform: scale(1.04);
+      filter: brightness(1.03);
+      z-index: 10;
+    }
+
+    .jar {
+      width: 72px;
+      height: 98px;
+      background: rgba(255,255,255,0.55);
+      border: 4px solid #d7a16d;
+      border-radius: 18px 18px 12px 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 10px rgba(0,0,0,0.12);
+    }
+
+    .fill {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 55%;
+    }
+
+    .label {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 8px;
+      background: rgba(255,248,220,0.92);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.66rem;
+      font-weight: bold;
+      border: 1px solid #c59a6c;
+      white-space: nowrap;
+    }
+
+    .tray {
+      width: 120px;
+      height: 55px;
+      background: #d9b382;
+      border: 4px solid #8b5a2b;
+      border-radius: 12px;
+      box-shadow: 0 6px 10px rgba(0,0,0,0.12);
+    }
+
+    .ticket {
+      width: 110px;
+      min-height: 72px;
+      background: #fffaf0;
+      border: 2px dashed #ae8b66;
+      padding: 8px;
+      font-size: 0.76rem;
+      line-height: 1.25;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.12);
+      transform: rotate(-4deg);
+    }
+
+    .chalkboard {
+      width: 155px;
+      min-height: 105px;
+      background: #304030;
+      color: #f7f5ea;
+      border: 6px solid #8b5a2b;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+    }
+
+    .note {
+      width: 128px;
+      min-height: 82px;
+      background: #fff3a8;
+      border: 2px solid #d4c25e;
+      padding: 10px;
+      font-size: 0.78rem;
+      line-height: 1.3;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.13);
+      transform: rotate(4deg);
+    }
+
+    .stool {
+      width: 70px;
+      height: 60px;
+      background: #8b5a2b;
+      border: 4px solid #5f3819;
+      border-radius: 8px;
+    }
+
+    .barrel {
+      width: 80px;
+      height: 100px;
+      background: linear-gradient(to bottom, #a66a36, #7a4a21);
+      border: 4px solid #5f3819;
+      border-radius: 14px;
+    }
+
+    .barrel::before,
+    .barrel::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      height: 6px;
+      background: #4b2a12;
+      border-radius: 4px;
+    }
+
+    .barrel::before { top: 20px; }
+    .barrel::after { bottom: 20px; }
+
+    .info-panel {
+      background: #fffaf2;
+      border: 4px double #c57f2f;
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 660px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .info-title {
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #a34d00;
+      margin-bottom: 10px;
+    }
+
+    .info-content {
+      font-size: 1rem;
+      line-height: 1.6;
+      white-space: pre-line;
+      color: #4b2e1c;
+    }
+
+    .hint {
+      margin-top: 18px;
+      padding: 12px;
+      background: #fff3cd;
+      border-left: 4px solid #d48806;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      color: #6b3a17;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .info-panel {
+        min-height: auto;
+      }
+
+      .fair-scene {
+        height: 760px;
+      }
+
+      .stall {
+        width: 90%;
+      }
+
+      .back-wall {
+        width: calc(100% - 40px);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .stall {
+        transform: translateX(-50%) scale(0.88);
+        transform-origin: bottom center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-wrapper">
+    <div class="title">Town Fair Candy Stall</div>
+    <div class="subtitle">You’re standing in front of the booth as the fair glows around you. Click anything that catches your eye.</div>
+
+    <div class="layout">
+      <div class="fair-scene">
+        <div class="light-string">
+          <div class="wire"></div>
+          <div class="bulb" style="left: 6%; top: 28px;"></div>
+          <div class="bulb" style="left: 14%; top: 42px;"></div>
+          <div class="bulb" style="left: 23%; top: 22px;"></div>
+          <div class="bulb" style="left: 34%; top: 44px;"></div>
+          <div class="bulb" style="left: 46%; top: 24px;"></div>
+          <div class="bulb" style="left: 57%; top: 40px;"></div>
+          <div class="bulb" style="left: 69%; top: 24px;"></div>
+          <div class="bulb" style="left: 80%; top: 42px;"></div>
+          <div class="bulb" style="left: 91%; top: 28px;"></div>
+        </div>
+
+        <div class="object carousel" onclick="showInfo('carousel')" title="Carousel"></div>
+        <div class="object game-booth" onclick="showInfo('gameBooth')" title="Game Booth"></div>
+
+        <div class="stall">
+          <div class="awning"></div>
+          <div class="awning-sign">Sweetest Stand Competition!</div>
+          <div class="back-wall"></div>
+          <div class="counter-top"></div>
+          <div class="counter"></div>
+
+          <!-- background objects -->
+          <div class="object chalkboard" style="top: 120px; left: 28px;" onclick="showInfo('menu')">
+            <strong>Menu</strong><br><br>
+            • Ribbon Caramels<br>
+            • Cocoa Squares<br>
+            • Festival Fudge<br>
+            • Mystery Special?
+          </div>
+
+          <div class="object note" style="top: 132px; right: 34px;" onclick="showInfo('judgeNote')">
+            Judge’s Note<br><br>
+            “Presentation matters.<br>
+            Surprise matters more.”
+          </div>
+
+          <!-- jars on counter -->
+          <div class="object jar" style="bottom: 95px; left: 95px;" onclick="showInfo('sprinkles')">
+            <div class="fill" style="background: linear-gradient(to top, #ff77b7, #ffd7eb);"></div>
+            <div class="label">Sprinkles</div>
+          </div>
+
+          <div class="object jar" style="bottom: 100px; left: 190px;" onclick="showInfo('cocoa')">
+            <div class="fill" style="background: linear-gradient(to top, #5f3720, #8f5d40);"></div>
+            <div class="label">Cocoa</div>
+          </div>
+
+          <div class="object jar" style="bottom: 102px; left: 285px;" onclick="showInfo('caramel')">
+            <div class="fill" style="background: linear-gradient(to top, #c97824, #f1b35f);"></div>
+            <div class="label">Caramel</div>
+          </div>
+
+          <div class="object jar" style="bottom: 98px; left: 385px; box-shadow: 0 0 18px rgba(255,215,100,0.9);" onclick="showInfo('goldenSugar')">
+            <div class="fill" style="background: linear-gradient(to top, #efb400, #ffe680);"></div>
+            <div class="label">Golden Sugar</div>
+          </div>
+
+          <!-- trays -->
+          <div class="object tray" style="bottom: 88px; left: 500px;" onclick="showInfo('candyTray')"></div>
+          <div class="object tray" style="bottom: 88px; left: 635px;" onclick="showInfo('sampleTray')"></div>
+
+          <!-- tickets -->
+          <div class="object ticket" style="bottom: 28px; left: 160px;" onclick="showInfo('ticket1')">
+            Order #12<br><br>
+            Caramel ribbons<br>
+            extra drizzle<br>
+            no cinnamon
+          </div>
+
+          <div class="object ticket" style="bottom: 28px; left: 290px; transform: rotate(5deg);" onclick="showInfo('ticket2')">
+            Order #13<br><br>
+            Chocolate bites<br>
+            rainbow topping<br>
+            add cinnamon
+          </div>
+
+          <!-- lower props -->
+          <div class="object stool" style="bottom: 18px; right: 95px;" onclick="showInfo('stool')"></div>
+          <div class="object barrel" style="bottom: 14px; left: 38px;" onclick="showInfo('sugarBarrel')"></div>
+
+          <!-- hidden small note -->
+          <div class="object" style="bottom: 36px; right: 205px; width: 92px; background: rgba(255,248,220,0.95); border: 2px dashed #b08968; padding: 6px; font-size: 0.72rem; line-height: 1.2; transform: rotate(-7deg);" onclick="showInfo('hiddenNote')">
+            don’t stir<br>backwards
+          </div>
+        </div>
+      </div>
+
+      <div class="info-panel">
+        <div class="info-title" id="infoTitle">Front of the Fair Stall</div>
+        <div class="info-content" id="infoContent">From here, the whole booth looks inviting at first glance: striped awning, warm lights, polished candy trays, cheerful colors.
+
+But the longer you look, the more the stall reveals itself through little details.
+
+The jars are slightly out of place.
+The order tickets are too close together.
+A judge’s note hangs where everyone can see it.
+Even the menu board feels like it’s waiting for one final decision.
+
+Click around the fair scene to inspect objects and learn more about the world of the story.</div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const infoData = {
+      carousel: {
+        title: "Carousel",
+        content: `Off to the left, the carousel turns slowly beneath strings of warm lights.
+
+Its music drifts over the fair in soft, slightly warped loops, making the whole place feel nostalgic and a little dreamlike.
+
+From here, it frames the candy stall as part of something bigger: not just a competition booth, but one bright corner of a living fairground night.`
+      },
+      gameBooth: {
+        title: "Game Booth",
+        content: `A crooked ring-toss booth leans slightly in the background.
+
+Its painted boards are chipped, and someone has definitely missed the bottles more than once tonight.
+
+Compared to the candy stall, it feels rougher and louder — a reminder that the fair is full of chance, spectacle, and almost-winning.`
+      },
+      menu: {
+        title: "Menu Board",
+        content: `The menu is written in careful chalk lettering, neat enough to suggest someone wanted the stall to look composed even if the night itself refused to cooperate.
+
+The final line — “Mystery Special?” — feels unfinished.
+
+It suggests possibility more than certainty, like the booth is still deciding what kind of story it wants to tell.`
+      },
+      judgeNote: {
+        title: "Judge’s Note",
+        content: `Pinned near the front where it can’t be ignored, the note reads:
+
+“Presentation matters.
+Surprise matters more.”
+
+It’s only two lines, but it changes the booth’s whole mood.
+
+This isn’t a contest about simply getting things right.
+It’s about leaving an impression.`
+      },
+      sprinkles: {
+        title: "Sprinkles Jar",
+        content: `The sprinkles are bright, cheerful, and just a little messy.
+
+A few cling to the inside of the glass. More have spilled around the jar’s base, as though someone grabbed them in a hurry and never fully cleaned up.
+
+They make the stall feel energetic and human — decorative, yes, but also evidence of panic disguised as enthusiasm.`
+      },
+      cocoa: {
+        title: "Cocoa Jar",
+        content: `The cocoa sits heavier than everything else on the counter.
+
+Dark, rich, reliable.
+
+Its label is smudged by a thumbprint, which makes it feel handled often and trusted under pressure.
+
+Among all the glowing sugar and colorful toppings, this is the ingredient that grounds the stall.`
+      },
+      caramel: {
+        title: "Caramel Jar",
+        content: `Amber ribbons cling to the inside of the glass in slow, glossy drips.
+
+The caramel looks rich enough to turn simple candy into something memorable.
+
+It also looks dangerous in the way hot sugar always does: beautiful, sticky, and one wrong move away from disaster.`
+      },
+      goldenSugar: {
+        title: "Golden Sugar Crystals",
+        content: `This jar catches the fair light differently from the others.
+
+The crystals shine with a soft gold glow, subtle enough that you almost think you imagined it.
+
+It feels rare. Saved. Important.
+
+Even from the front of the stall, it stands out like the ingredient meant for a version of the night that turns out better than expected.`
+      },
+      candyTray: {
+        title: "Candy Tray",
+        content: `The tray is arranged as neatly as possible, with each piece lined up like proof that someone is trying very hard to keep things under control.
+
+The rows are almost perfect.
+
+Almost.
+
+That tiny imperfection makes the display more interesting — less like a store window, more like something made live, under pressure, by actual hands.`
+      },
+      sampleTray: {
+        title: "Sample Tray",
+        content: `This tray sits closer to the edge of the booth, clearly meant for passing customers.
+
+A few pieces are missing already.
+
+It gives the stall an open, welcoming feeling, but also a risky one: every sample is a tiny public test.
+
+Here, taste becomes judgment.`
+      },
+      ticket1: {
+        title: "Order Ticket #12",
+        content: `Order #12 asks for caramel ribbons with extra drizzle and no cinnamon.
+
+The paper is bent at one corner and faintly sticky.
+
+It looks like it was picked up, put down, and re-read more than once.
+
+Even without context, it already feels like part of the mistake.`
+      },
+      ticket2: {
+        title: "Order Ticket #13",
+        content: `Order #13 calls for chocolate bites, rainbow topping, and cinnamon.
+
+Placed so close to the other ticket, it’s easy to see how the confusion happened.
+
+From a customer’s point of view, the problem becomes visible through layout alone:
+two orders, one crowded counter, not enough time.`
+      },
+      stool: {
+        title: "Wooden Stool",
+        content: `A small stool sits tucked near the side of the booth.
+
+It’s practical and ordinary, which makes it strangely revealing.
+
+Someone expected a long night.
+Someone planned to be here for hours.
+Someone thought this would be tiring, but maybe not chaotic.`
+      },
+      sugarBarrel: {
+        title: "Sugar Barrel",
+        content: `A small barrel of extra sugar rests near the front corner of the booth.
+
+It adds to the fairground look, but it also suggests scale — this stall wasn’t meant for one or two customers.
+
+It was built for a crowd.
+
+That makes the mix-up feel bigger too: mistakes matter more when everyone is watching.`
+      },
+      hiddenNote: {
+        title: "Hidden Scribble",
+        content: `Tucked near the edge of the booth is a tiny note that reads:
+
+“don’t stir backwards”
+
+It’s funny, specific, and a little absurd.
+
+That makes it perfect.
+
+This one scrap of writing gives the stall its slightly enchanted fairytale logic, where recipes live somewhere between technique, superstition, and shared habit.`
+      }
+    };
+
+    function showInfo(key) {
+      document.getElementById("infoTitle").textContent = infoData[key].title;
+      document.getElementById("infoContent").textContent = infoData[key].content;
+    }
+  </script>
+</body>
+</html>
